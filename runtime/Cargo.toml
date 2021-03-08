@@ -22,6 +22,7 @@ frame-support = { version = "3.0.0", default-features = false }
 pallet-grandpa = { version = "3.0.0", default-features = false }
 pallet-randomness-collective-flip = { version = "3.0.0", default-features = false }
 pallet-sudo = { version = "3.0.0", default-features = false }
+pallet-vesting = { version = "3.0.0", default-features = false }
 frame-system = { version = "3.0.0", default-features = false }
 pallet-timestamp = { version = "3.0.0", default-features = false }
 pallet-transaction-payment = { version = "3.0.0", default-features = false }
@@ -65,6 +66,7 @@ std = [
     "pallet-timestamp/std",
     "pallet-transaction-payment/std",
     "pallet-transaction-payment-rpc-runtime-api/std",
+    "pallet-vesting/std",
     "serde",
     "sp-api/std",
     "sp-block-builder/std",
@@ -79,6 +81,8 @@ std = [
     "sp-version/std",
     "frame-system/std",
     "frame-system-rpc-runtime-api/std",
+    "frame-benchmarking/std",
+    "frame-system-benchmarking/std",
     "assets/std",
     "orderbook-engine/std",
     "polkapool/std"

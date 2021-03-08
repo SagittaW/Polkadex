@@ -12,9 +12,7 @@ use sp_runtime::{
 	ApplyExtrinsicResult, generic, create_runtime_str, impl_opaque_keys, MultiSignature,
 	transaction_validity::{TransactionValidity, TransactionSource},
 };
-use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, AccountIdLookup, Verify, IdentifyAccount, NumberFor,
-};
+use sp_runtime::traits::{BlakeTwo256, Block as BlockT, AccountIdLookup, Verify, IdentifyAccount, NumberFor, ConvertInto};
 use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use pallet_grandpa::{AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList};
@@ -38,8 +36,11 @@ pub use frame_support::{
 	},
 };
 use pallet_transaction_payment::CurrencyAdapter;
-
 use orderbook_engine;
+use sp_runtime::traits::Convert;
+use frame_system::Config;
+use frame_support::pallet_prelude::Get;
+use pallet_vesting::WeightInfo;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -257,6 +258,18 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
+parameter_types! {
+	pub const MinVestedTransfer: Balance = 100;
+}
+
+impl pallet_vesting::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type BlockNumberToBalance = ConvertInto;
+	type MinVestedTransfer = MinVestedTransfer;
+	type WeightInfo = pallet_vesting::weights::SubstrateWeight<Runtime>;
+}
+
 impl orderbook_engine::Config for Runtime{
 	type Event = Event;
 	type Balance = Balance;
@@ -298,6 +311,7 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		Assets: assets::{Module, Call, Config<T>, Storage, Event<T>},
+		Vesting: pallet_vesting::{Module, Call, Config<T>, Storage, Event<T>},
 		Engine: orderbook_engine::{Module, Call, Storage, Event<T>},
 		Polkapool: polkapool::{Module, Call, Storage, Event<T>},
 	}
@@ -497,6 +511,7 @@ impl_runtime_apis! {
 			add_benchmark!(params, batches, pallet_timestamp, Timestamp);
 			add_benchmark!(params, batches, assets, Assets);
 			add_benchmark!(params, batches, orderbook_engine, Engine);
+			add_benchmark!(params, batches, pallet_vesting, Vesting);
 
 			if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }
 			Ok(batches)

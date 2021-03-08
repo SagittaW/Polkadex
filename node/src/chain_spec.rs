@@ -1,7 +1,7 @@
 use sp_core::{Pair, Public, sr25519};
 use node_polkadex_runtime::{
 	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
-	SudoConfig, SystemConfig, WASM_BINARY, Signature, AssetsConfig
+	SudoConfig, SystemConfig, WASM_BINARY, Signature, AssetsConfig, VestingConfig
 };
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::AuthorityId as GrandpaId;
@@ -163,5 +163,14 @@ fn testnet_genesis(
 				)
 			]
 		}),
+		pallet_vesting: Some(VestingConfig{
+			// Generate initial vesting configuration
+			// * who - Account which we are generating vesting configuration for
+			// * begin - Block when the account will start to vest
+			// * length - Number of blocks from `begin` until fully vested
+			// * liquid - Number of units which can be spent before vesting begins
+			// Vec<(T::AccountId, T::BlockNumber, T::BlockNumber, BalanceOf<T>)
+			vesting: vec![(get_account_id_from_seed::<sr25519::Public>("Alice"),30 as u32,10 as u32,100000000000000u128)]
+		})
 	}
 }
