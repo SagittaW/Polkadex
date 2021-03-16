@@ -343,16 +343,6 @@ impl template::Config for Runtime {
 	type Event = Event;
 }
 
-parameter_types! {
-    pub const TradingPathLimitPolkadex: usize = 10;
-}
-
-impl polkapool::Config for Runtime {
-	type Event = Event;
-	type TradingPathLimit = TradingPathLimitPolkadex;
-	type Balance = Balance;
-}
-
 // impl polkapool::Config for Runtime {
 // 	type Event = Event;
 // 	type TradingPathLimit = ();
@@ -375,7 +365,6 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		ParachainInfo: parachain_info::{Module, Storage, Config},
 		XcmHandler: cumulus_pallet_xcm_handler::{Module, Event<T>, Origin},
-		PolkaPool: polkapool::{Module, Call, Storage, Event<T>},
 		TemplateModule: template::{Module, Call, Storage, Event<T>},
 	}
 );

@@ -4643,7 +4643,6 @@ dependencies = [
  "parachain-info",
  "parity-scale-codec",
  "polkadot-parachain",
- "polkapool",
  "serde",
  "sp-api",
  "sp-block-builder",
@@ -5986,19 +5985,6 @@ dependencies = [
  "tempfile",
  "tracing",
  "tracing-futures",
-]
-
-[[package]]
-name = "polkapool"
-version = "0.1.0"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-runtime",
 ]
 
 [[package]]
